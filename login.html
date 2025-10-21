@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tela de Login - EcoMed</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+      body { 
+        background-color: #ffffff; 
+        font-family: "Poppins", sans-serif; 
+        margin: 0; 
+        padding: 0; 
+        display: flex; 
+        justify-content: center; 
+        align-items: center; 
+        min-height: 100vh;
+      }
+
+      .login-container { 
+        width: 90%; 
+        max-width: 400px; 
+        margin: 20px auto; 
+        text-align: center; 
+        background-color: #fff; 
+        padding: 30px 20px; 
+        border-radius: 20px; 
+        box-shadow: 0px 4px 10px rgba(0,0,0,0.1); 
+      }
+
+      h1 { color: #00bfff; font-weight: 600; margin-bottom: 10px; font-size: 1.6rem; }
+      p { font-size: 0.95rem; margin-bottom: 15px; color: #555; }
+
+      .form-control { 
+        border-radius: 10px; 
+        border: 1px solid #bbb; 
+        margin-bottom: 12px; 
+        padding: 10px;
+        font-size: 0.95rem;
+      }
+
+      .btn-login, .btn-cadastrar { 
+        border-radius: 20px; 
+        width: 48%; 
+        font-size: 0.95rem;
+      }
+
+      .btn-login { background-color: #00bfff; color: white; margin-right: 4%; }
+      .btn-cadastrar { background-color: #eaeaea; color: #555; }
+
+      .google-btn { 
+        border: 1px solid #ccc; 
+        border-radius: 25px; 
+        padding: 8px 50px; 
+        margin: 10px 0; 
+        background-color: white; 
+        box-shadow: 0px 2px 4px rgba(0,0,0,0.1); 
+        display: inline-flex; 
+        align-items: center; 
+        gap: 10px; 
+        cursor: pointer; 
+        transition: 0.2s; 
+      }
+
+      .google-btn:hover { background-color: #f8f9fa; transform: scale(1.03); }
+      .google-btn img { width: 22px; height: 22px; }
+
+      .tipo-usuario { margin: 10px 0 20px 0; }
+      .password-wrapper { position: relative; }
+      .toggle-password { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: #888; }
+      .toggle-password:hover { color: #00bfff; }
+
+      /* Responsividade */
+      @media (max-width: 576px) {
+        .btn-login, .btn-cadastrar { width: 100%; margin: 5px 0; }
+        .google-btn { padding: 8px 20px; width: 100%; justify-content: center; }
+        h1 { font-size: 1.4rem; }
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="login-container">
+      <h1>Seja bem-vindo</h1>
+      <p>Efetue seu login ou cadastro</p>
+
+      <!-- Botão Google -->
+      <button class="google-btn" type="button" onclick="loginGoogle()">
+        <img src="images.jpeg" alt="Google Logo"> Entrar com Google
+      </button>
+
+      <!-- Tipo de usuário -->
+      <div class="tipo-usuario d-flex justify-content-center align-items-center gap-4 flex-wrap">
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="tipoUsuario" id="instituicao">
+          <label class="form-check-label" for="instituicao">Instituição</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="tipoUsuario" id="consumidor" checked>
+          <label class="form-check-label" for="consumidor">Consumidor</label>
+        </div>
+      </div>
+
+      <!-- Formulário principal -->
+      <form id="loginForm">
+        <input type="text" class="form-control" id="usuarioCpfCnpj" placeholder="CPF ou E-mail">
+
+        <div class="password-wrapper">
+          <input type="password" class="form-control" id="senha" placeholder="Senha">
+          <button type="button" class="toggle-password" onclick="togglePassword('senha', this)">
+            <i class="bi bi-eye"></i>
+          </button>
+        </div>
+
+        <div class="d-flex justify-content-between mt-3 flex-wrap">
+          <button type="submit" class="btn btn-login">Login</button>
+          <button type="button" class="btn btn-cadastrar" onclick="window.location.href='cadastro.html'">Cadastrar</button>
+        </div>
+      </form>
+    </div>
+
+    <script>
+      function togglePassword(id, btn) {
+        const input = document.getElementById(id);
+        const icon = btn.querySelector("i");
+        if (input.type === "password") {
+          input.type = "text";
+          icon.classList.remove("bi-eye");
+          icon.classList.add("bi-eye-slash");
+        } else {
+          input.type = "password";
+          icon.classList.remove("bi-eye-slash");
+          icon.classList.add("bi-eye");
+        }
+      }
+
+      const radios = document.querySelectorAll('input[name="tipoUsuario"]');
+      const usuarioInput = document.getElementById('usuarioCpfCnpj');
+      radios.forEach(radio => {
+        radio.addEventListener('change', () => {
+          const tipo = document.querySelector('input[name="tipoUsuario"]:checked').id;
+          usuarioInput.placeholder = tipo === 'instituicao' ? 'CNPJ ou E-mail' : 'CPF ou E-mail';
+        });
+      });
+
+      document.getElementById('loginForm').addEventListener('submit', function(e){
+        e.preventDefault();
+        const tipo = document.querySelector('input[name="tipoUsuario"]:checked').id;
+        localStorage.setItem('tipoUsuario', tipo);
+        window.location.href = 'home.html';
+      });
+
+      function loginGoogle() {
+        const tipo = document.querySelector('input[name="tipoUsuario"]:checked').id;
+        localStorage.setItem('tipoUsuario', tipo);
+        window.location.href = 'loginGoogle.html';
+      }
+    </script>
+  </body>
+</html>

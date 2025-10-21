@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Avaliar Ponto de Coleta</title>
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Bootstrap Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+
+  <style>
+    body {
+      background-color: #ffffff;
+      font-family: "Roboto", Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    /* Navbar */
+    .navbar {
+      background-color: #00c0e0;
+      padding: 0.8rem 1.2rem;
+    }
+
+    .navbar-brand {
+      color: #fff !important;
+      font-weight: 600;
+      font-size: 1.3rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .back-btn {
+      color: #fff;
+      text-decoration: none;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 1rem;
+      transition: color 0.3s ease;
+    }
+
+    .back-btn:hover { color: #e0e0e0; }
+    .back-btn i { font-size: 1.5rem; }
+
+    h1 {
+      color: #00b4eb;
+      font-weight: bold;
+      margin: 40px 0;
+      text-align: center;
+    }
+
+    /* Container principal */
+    .main-container {
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      gap: 40px;
+      margin: 0 auto;
+      max-width: 1200px;
+      padding: 20px;
+    }
+
+    /* Colunas */
+    .left-column,
+    .right-column {
+      background-color: #f9f9f9;
+      border-radius: 15px;
+      padding: 25px 35px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      flex: 1 1 300px;
+      min-width: 280px;
+    }
+
+    .section-title {
+      background-color: #00b4eb;
+      color: white;
+      font-weight: bold;
+      padding: 8px 15px;
+      border-radius: 8px;
+      margin-bottom: 15px;
+      display: inline-block;
+    }
+
+    .form-control, .form-select, textarea {
+      border: 1.5px solid #ccc;
+      border-radius: 8px;
+      margin-bottom: 15px;
+      padding: 10px;
+      width: 100%;
+    }
+
+    /* Estrelas */
+    .star-rating {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 15px;
+    }
+
+    .star-rating .bi {
+      font-size: 1.8rem;
+      color: #ccc;
+      cursor: pointer;
+      transition: color 0.2s ease;
+    }
+
+    .star-rating .bi.active { color: #ffc107; }
+
+    /* Mapa */
+    #map-iframe {
+      width: 100%;
+      height: 400px;
+      border: 2px solid #ccc;
+      border-radius: 10px;
+    }
+
+    /* Botão salvar */
+    .btn-save {
+      background-color: #00e060;
+      color: white;
+      font-weight: bold;
+      border: none;
+      border-radius: 25px;
+      padding: 10px 35px;
+      display: block;
+      margin: 20px auto 0 auto;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      width: 100%;
+      max-width: 250px;
+    }
+
+    .btn-save:hover { background-color: #00c854; }
+
+    footer {
+      background-color: #00c0e0;
+      color: #fff;
+      text-align: center;
+      padding: 10px 0;
+      width: 100%;
+      font-size: 0.9rem;
+      margin-top: 40px;
+    }
+
+    @media (max-width: 992px) {
+      #map-iframe { height: 300px; }
+    }
+
+    @media (max-width: 768px) {
+      .main-container { flex-direction: column; align-items: center; gap: 25px; }
+      #map-iframe { height: 250px; }
+    }
+
+    @media (max-width: 480px) {
+      h1 { font-size: 1.5rem; }
+      .left-column, .right-column { padding: 20px; }
+      .btn-save { max-width: 100%; }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg">
+    <div class="container-fluid d-flex align-items-center justify-content-between">
+      <div class="d-flex align-items-center">
+        <a href="javascript:history.back()" class="back-btn">
+          <i class="bi bi-arrow-left"></i> Voltar
+        </a>
+        <a href="home.html" class="navbar-brand ms-3">Eco-Med</a>
+      </div>
+    </div>
+  </nav>
+
+  <h1>Avaliar Ponto de Coleta</h1>
+
+  <div class="main-container">
+    <!-- Coluna esquerda: formulário -->
+    <div class="left-column">
+      <div class="section-title">Avaliação</div>
+      <form onsubmit="salvarAvaliacao(event)">
+        <label for="pontoColeta" class="form-label">Ponto de coleta</label>
+        <select class="form-select" id="pontoColeta">
+          <option selected>Selecione...</option>
+          <option value="1">Ponto 1</option>
+          <option value="2">Ponto 2</option>
+          <option value="3">Ponto 3</option>
+        </select>
+
+        <label for="endereco" class="form-label">Endereço</label>
+        <input type="text" class="form-control" id="endereco" placeholder="Digite o endereço">
+
+        <label class="form-label">Nota</label>
+        <div class="star-rating" id="stars">
+          <i class="bi bi-star-fill" data-value="1"></i>
+          <i class="bi bi-star-fill" data-value="2"></i>
+          <i class="bi bi-star-fill" data-value="3"></i>
+          <i class="bi bi-star-fill" data-value="4"></i>
+          <i class="bi bi-star-fill" data-value="5"></i>
+        </div>
+
+        <label for="observacoes" class="form-label">Observações</label>
+        <textarea class="form-control" id="observacoes" rows="4" placeholder="Digite suas observações"></textarea>
+
+        <button type="submit" class="btn-save">Salvar avaliação</button>
+      </form>
+    </div>
+
+    <!-- Coluna direita: mapa -->
+    <div class="right-column">
+      <div class="section-title">Localização</div>
+      <iframe
+        id="map-iframe"
+        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3656.259782353585!2d-46.635633!3d-23.55052!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94ce59d9a9d92cbd%3A0x5a07edec6ef9ad57!2sSão%20Paulo%2C%20SP!5e0!3m2!1spt-BR!2sbr!4v1697440000000!5m2!1spt-BR!2sbr"
+        allowfullscreen
+        loading="lazy"
+      ></iframe>
+    </div>
+  </div>
+
+  <footer>© 2025 Eco-Med - Todos os direitos reservados</footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    // Função para salvar avaliação, mostrar alerta e redirecionar
+    function salvarAvaliacao(event) {
+      event.preventDefault();
+      alert("Avaliação salva com sucesso!");
+      window.location.href = 'registrarDescarte.html';
+    }
+
+    // Controle das estrelas
+    const stars = document.querySelectorAll('.star-rating .bi');
+    let selectedRating = 0;
+
+    stars.forEach(star => {
+      star.addEventListener('click', () => {
+        selectedRating = star.getAttribute('data-value');
+        updateStars(selectedRating);
+      });
+      star.addEventListener('mouseover', () => {
+        updateStars(star.getAttribute('data-value'));
+      });
+      star.addEventListener('mouseout', () => {
+        updateStars(selectedRating);
+      });
+    });
+
+    function updateStars(rating) {
+      stars.forEach(star => {
+        if (star.getAttribute('data-value') <= rating) {
+          star.classList.add('active');
+        } else {
+          star.classList.remove('active');
+        }
+      });
+    }
+  </script>
+</body>
+</html>

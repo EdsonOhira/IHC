@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Eco-Med - Área da Instituição</title>
+
+    <!-- Bootstrap -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <!-- Ícones Bootstrap -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
+      rel="stylesheet"
+    />
+
+    <style>
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+      }
+
+      body {
+        background-color: #ffffff;
+        font-family: "Roboto", Arial, sans-serif;
+        flex: 1;
+      }
+
+      main {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .navbar {
+        background-color: #00c0e0;
+        padding: 0.8rem 1.2rem;
+      }
+
+      .navbar-brand {
+        color: #fff !important;
+        font-weight: 600;
+        font-size: 1.3rem;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        border-radius: 10px;
+        padding: 8px 16px;
+        transition: all 0.3s ease;
+      }
+
+      .navbar-brand:hover {
+        background-color: #00a8c8;
+        text-decoration: none;
+        color: #fff !important;
+      }
+
+      .back-btn {
+        color: #fff;
+        text-decoration: none;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 1rem;
+        transition: color 0.3s ease;
+      }
+
+      .back-btn:hover { color: #e0e0e0; }
+      .back-btn i { font-size: 1.5rem; }
+
+      h1 {
+        color: #00b4eb;
+        font-weight: bold;
+        margin-top: 40px;
+        text-align: center;
+      }
+
+      .main-container {
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        flex-wrap: wrap;
+        gap: 30px;
+        margin: 30px auto;
+        padding-bottom: 50px;
+        max-width: 1400px;
+        width: 100%;
+      }
+
+      .left-column,
+      .right-column {
+        background-color: #f9f9f9;
+        border-radius: 15px;
+        padding: 25px 30px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        flex: 1 1 350px;
+        min-width: 280px;
+        max-width: 600px;
+      }
+
+      .section-title {
+        background-color: #00b4eb;
+        color: white;
+        font-weight: bold;
+        padding: 8px 15px;
+        border-radius: 8px;
+        margin-bottom: 15px;
+        display: inline-block;
+      }
+
+      .form-control {
+        border: 2px solid #000;
+        border-radius: 10px;
+        margin-bottom: 20px;
+        padding: 10px;
+        width: 100%;
+      }
+
+      .filter-list {
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        max-height: 120px;
+        overflow-y: auto;
+        background-color: white;
+        position: absolute;
+        width: 100%;
+        z-index: 1000;
+        display: none;
+      }
+
+      .filter-item {
+        padding: 8px 12px;
+        cursor: pointer;
+        transition: background-color 0.2s;
+      }
+
+      .filter-item:hover { background-color: #e0f7fa; }
+
+      .filter-container { position: relative; }
+
+      .form-check-input[type="radio"] {
+        width: 22px;
+        height: 22px;
+        transform: scale(1.3);
+        margin-right: 8px;
+        cursor: pointer;
+        border: 2px solid #00b4eb;
+      }
+
+      .form-check-input:checked {
+        background-color: #00b4eb;
+        border-color: #009bcc;
+        box-shadow: 0 0 0 3px rgba(0, 180, 235, 0.25);
+      }
+
+      .form-check-label {
+        font-size: 1.2rem;
+        font-weight: 500;
+        color: #333;
+        cursor: pointer;
+      }
+
+      .actions {
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 15px;
+      }
+
+      .actions .btn {
+        border-radius: 25px;
+        font-weight: 500;
+        flex: 1 1 100px;
+      }
+
+      .btn-edit { background-color: #00b4eb; color: #fff; }
+      .btn-pause { background-color: #ffc107; color: #fff; }
+      .btn-remove { background-color: #ff5252; color: #fff; }
+
+      .btn-save {
+        background-color: #00e060;
+        color: white;
+        font-weight: bold;
+        border: none;
+        border-radius: 25px;
+        padding: 10px 35px;
+        display: block;
+        margin: 20px auto 0 auto;
+        transition: all 0.3s ease;
+        width: 100%;
+        max-width: 250px;
+      }
+
+      .btn-save:hover { 
+        background-color: #00c854; 
+        transform: translateY(-3px);
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.35);
+      }
+
+      footer {
+        background-color: #00c0e0;
+        color: #fff;
+        text-align: center;
+        padding: 10px 0;
+        width: 100%;
+        font-size: 0.9rem;
+        margin-top: auto;
+      }
+    </style>
+  </head>
+
+  <body>
+    <nav class="navbar navbar-expand-lg">
+      <div class="container-fluid d-flex align-items-center justify-content-between">
+        <div class="d-flex align-items-center">
+          <a href="javascript:history.back()" class="back-btn">
+            <i class="bi bi-arrow-left"></i> Voltar
+          </a>
+          <a href="home.html" class="navbar-brand ms-3">Eco-Med</a>
+        </div>
+      </div>
+    </nav>
+
+    <main>
+      <h1>Área da Instituição</h1>
+
+      <div class="main-container">
+        <div class="left-column">
+          <div class="section-title">Meus medicamentos</div>
+
+          <div class="filter-container">
+            <input
+              type="text"
+              class="form-control"
+              id="filterMedicamentos1"
+              placeholder="Digite o nome do medicamento"
+            />
+            <div id="listMedicamentos1" class="filter-list"></div>
+          </div>
+
+          <div class="mb-3 mt-3">
+            <label class="form-label fw-bold">Status:</label><br />
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" name="status" id="ativa" checked />
+              <label class="form-check-label" for="ativa">Ativa</label>
+            </div>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" name="status" id="pausada" />
+              <label class="form-check-label" for="pausada">Pausada</label>
+            </div>
+          </div>
+
+          <div class="actions">
+            <button class="btn btn-edit">Editar</button>
+            <button class="btn btn-pause">Pausar</button>
+            <button class="btn btn-remove">Remover</button>
+          </div>
+
+          <hr />
+
+          <div class="section-title">Histórico de medicamentos</div>
+          <input type="date" class="form-control" placeholder="Datas" />
+
+          <div class="filter-container">
+            <input
+              type="text"
+              class="form-control"
+              id="filterMedicamentos2"
+              placeholder="Digite o nome do medicamento"
+            />
+            <div id="listMedicamentos2" class="filter-list"></div>
+          </div>
+        </div>
+
+        <div class="right-column">
+          <h5 class="fw-bold mb-3 text-center">Editar perfil</h5>
+
+          <input type="text" class="form-control" placeholder="Razão social" />
+          <input type="text" class="form-control" placeholder="Telefone" value="(11) 1234-5678" />
+          <input type="text" class="form-control" placeholder="Endereço" />
+
+          <button class="btn-save" id="saveBtn">Salvar alterações</button>
+        </div>
+      </div>
+    </main>
+
+    <footer>© 2025 Eco-Med - Todos os direitos reservados</footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+      const medicamentos = [
+        "Paracetamol","Ibuprofeno","Amoxicilina","Dipirona","Omeprazol",
+        "Lorazepam","Cetirizina","Losartana","Sinvastatina","Azitromicina"
+      ];
+
+      function configurarFiltro(inputId, listId) {
+        const input = document.getElementById(inputId);
+        const list = document.getElementById(listId);
+
+        input.addEventListener("input", () => {
+          const filtro = input.value.toLowerCase();
+          list.innerHTML = "";
+          if (filtro) {
+            const filtrados = medicamentos.filter((m) => m.toLowerCase().includes(filtro));
+            if (filtrados.length > 0) {
+              list.style.display = "block";
+              filtrados.forEach((m) => {
+                const item = document.createElement("div");
+                item.classList.add("filter-item");
+                item.textContent = m;
+                item.addEventListener("click", () => {
+                  input.value = m;
+                  list.style.display = "none";
+                });
+                list.appendChild(item);
+              });
+            } else {
+              list.style.display = "none";
+            }
+          } else {
+            list.style.display = "none";
+          }
+        });
+
+        document.addEventListener("click", (e) => {
+          if (!list.contains(e.target) && e.target !== input) {
+            list.style.display = "none";
+          }
+        });
+      }
+
+      configurarFiltro("filterMedicamentos1", "listMedicamentos1");
+      configurarFiltro("filterMedicamentos2", "listMedicamentos2");
+
+      const saveBtn = document.getElementById("saveBtn");
+      saveBtn.addEventListener("click", (event) => {
+        event.preventDefault();
+        alert("Informações salvas com sucesso!");
+      });
+    </script>
+  </body>
+</html>
